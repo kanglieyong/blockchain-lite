@@ -10,7 +10,7 @@ import (
 
 const targetBits = 24
 
-const MaxNonce = math.MaxInt64
+const maxNonce = math.MaxInt64
 
 type ProofOfWork struct {
   block  *Block
@@ -20,6 +20,8 @@ type ProofOfWork struct {
 func NewProofOfWork(b *Block) *ProofOfWork {
   target := big.NewInt(1)
   target.Lsh(target, uint(256-targetBits))
+
+  pow := &ProofOfWork{b, target}
 
   return pow
 }
