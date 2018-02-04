@@ -1,17 +1,15 @@
 package main
 
 import (
-  "bytes"
-  "crypto/sha256"
-  "strconv"
   "time"
 )
 
 type Block struct {
-  Timestamp int64
+  Timestamp     int64
   PrevBlockHash []byte
-  Hash []byte
-  Data []byte
+  Hash          []byte
+  Data          []byte
+  Nonce         int
 }
 
 func NewBlock(data string, prevBlockHash []byte) *Block {
@@ -19,19 +17,15 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
     Timestamp     : time.Now().Unix(),
     PrevBlockHash : prevBlockHash,
     Hash          : []byte{},
-    Data          : []byte(data)}
+    Data          : []byte(data)
+    Nonce         : 0}
+  pow := NewProofOfWork(block)
+  nonce, hash := pow.Run()
 
-  block.SetHash()
+  block.Hash  = hash[:]
+  block.Nonce = nonce
 
   return block
-}
-
-func(b *Block) SetHash() {
-  timestamp := []byte(strconv.FormatInt(b.Timestamp, 10))
-  headers   := bytes.Join([][]byte{b.PrevBlockHash, b.Data, timestamp}, []byte{})
-  hash      := sha256.Sum256(headers)
-
-  b.Hash = hash[:]
 }
 
 func NewGenesisBlock() *Block {
