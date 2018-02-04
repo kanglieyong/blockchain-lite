@@ -17,7 +17,7 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
     Timestamp     : time.Now().Unix(),
     PrevBlockHash : prevBlockHash,
     Hash          : []byte{},
-    Data          : []byte(data)
+    Data          : []byte(data),
     Nonce         : 0}
   pow := NewProofOfWork(block)
   nonce, hash := pow.Run()
